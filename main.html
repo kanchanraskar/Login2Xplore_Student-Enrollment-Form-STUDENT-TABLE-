@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Enrollment Form</title>
+    <style>
+        label { margin-top: 10px; display: block; }
+        input, textarea { margin-bottom: 10px; padding: 5px; width: 100%; }
+        .form-container { width: 50%; margin: 0 auto; padding: 20px; border: 1px solid #ccc; }
+        .buttons { display: flex; gap: 10px; }
+        
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Student Enrollment Form</h2>
+
+    <!-- Student Enrollment Form -->
+    <form id="studentForm">
+        <label for="rollNo">Roll No.</label>
+        <input type="text" id="rollNo" name="rollNo" required disabled>
+
+        <label for="fullName">Full Name</label>
+        <input type="text" id="fullName" name="fullName" required disabled>
+
+        <label for="class">Class</label>
+        <input type="text" id="class" name="class" required disabled>
+
+        <label for="birthDate">Birth Date</label>
+        <input type="date" id="birthDate" name="birthDate" required disabled>
+
+        <label for="address">Address</label>
+        <textarea id="address" name="address" required disabled></textarea>
+
+        <label for="enrollmentDate">Enrollment Date</label>
+        <input type="date" id="enrollmentDate" name="enrollmentDate" required disabled>
+
+        <div class="buttons">
+            <button type="button" id="saveButton" disabled onclick="saveData()">Save</button>
+            <button type="button" id="updateButton" disabled onclick="updateData()">Update</button>
+            <button type="reset" id="resetButton" onclick="resetForm()">Reset</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    // Simulate the database as an object
+    const database = {
+        101: {
+            fullName: "John Doe",
+            class: "10th",
+            birthDate: "2005-04-20",
+            address: "123 Main St.",
+            enrollmentDate: "2023-09-01"
+        },
+        102: {
+            fullName: "Jane Smith",
+            class: "11th",
+            birthDate: "2004-07-15",
+            address: "456 Oak Ave.",
+            enrollmentDate: "2023-08-15"
+        }
+    };
+
+    // Event listener to detect Roll No. input
+    document.getElementById('rollNo').addEventListener('input', function() {
+        const rollNo = this.value;
+        
+        if (database[rollNo]) {
+            // If the roll number exists, display data for update
+            populateForm(rollNo);
+            enableUpdateButtons();
+        } else {
+            // If the roll number doesn't exist, enable save button
+            resetForm();
+            enableSaveButtons();
+        }
+    });
+
+    // Populate the form with data from the database
+    function populateForm(rollNo) {
+        const student = database[rollNo];
+        document.getElementById('fullName').value = student.fullName;
+        document.getElementById('class').value = student.class;
+        document.getElementById('birthDate').value = student.birthDate;
+        document.getElementById('address').value = student.address;
+        document.getElementById('enrollmentDate').value = student.enrollmentDate;
+    }
+
+    // Enable Save buttons and move cursor
+    function enableSaveButtons() {
+        document.getElementById('fullName').disabled = false;
+        document.getElementById('class').disabled = false;
+        document.getElementById('birthDate').disabled = false;
+        document.getElementById('address').disabled = false;
+        document.getElementById('enrollmentDate').disabled = false;
+        document.getElementById('saveButton').disabled = false;
+        document.getElementById('resetButton').disabled = false;
+        document.getElementById('rollNo').disabled = true;  // Roll No. is now read-only
+        document.getElementById('fullName').focus();
+    }
+
+    // Enable Update buttons
+    function enableUpdateButtons() {
+        document.getElementById('fullName').disabled = false;
+        document.getElementById('class').disabled = false;
+        document.getElementById('birthDate').disabled = false;
+        document.getElementById('address').disabled = false;
+        document.getElementById('enrollmentDate').disabled = false;
+        document.getElementById('updateButton').disabled = false;
+        document.getElementById('resetButton').disabled = false;
+        document.getElementById('rollNo').disabled = true;
+        document.getElementById('fullName').focus();
+    }
+
+    // Save data function
+    function saveData() {
+        const rollNo = document.getElementById('rollNo').value;
+        const fullName = document.getElementById('fullName').value;
+        const className = document.getElementById('class').value;
+        const birthDate = document.getElementById('birthDate').value;
+        const address = document.getElementById('address').value;
+        const enrollmentDate = document.getElementById('enrollmentDate').value;
+
+        // Simple validation check for empty fields
+        if (!fullName || !className || !birthDate || !address || !enrollmentDate) {
+            alert("Please fill out all fields before saving.");
+            return;
+        }
+
+        // Save the data in the "database"
+        database[rollNo] = { fullName, class: className, birthDate, address, enrollmentDate };
+        alert("Student data saved successfully!");
+
+        resetForm();
+    }
+
+    // Update data function
+    function updateData() {
+        const rollNo = document.getElementById('rollNo').value;
+        const fullName = document.getElementById('fullName').value;
+        const className = document.getElementById('class').value;
+        const birthDate = document.getElementById('birthDate').value;
+        const address = document.getElementById('address').value;
+        const enrollmentDate = document.getElementById('enrollmentDate').value;
+
+        // Simple validation check for empty fields
+        if (!fullName || !className || !birthDate || !address || !enrollmentDate) {
+            alert("Please fill out all fields before updating.");
+            return;
+        }
+
+        // Update the data in the "database"
+        database[rollNo] = { fullName, class: className, birthDate, address, enrollmentDate };
+        alert("Student data updated successfully!");
+
+        resetForm();
+    }
+
+    // Reset form to initial state
+    function resetForm() {
+        document.getElementById('studentForm').reset();
+        document.getElementById('rollNo').disabled = false;
+        document.getElementById('saveButton').disabled = true;
+        document.getElementById('updateButton').disabled = true;
+        document.getElementById('resetButton').disabled = false;
+    }
+</script>
+
+</body>
+</html>
